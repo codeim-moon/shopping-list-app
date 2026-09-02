@@ -13,11 +13,11 @@
 
 ## 실행 방법
 
-`shopping-list/index.html` 파일을 브라우저로 열면 바로 사용할 수 있습니다.
+`index.html` 파일을 브라우저로 열면 바로 사용할 수 있습니다.
 
 ```bash
 # 예시 (Windows)
-start shopping-list/index.html
+start index.html
 ```
 
 ## 기술 스택
