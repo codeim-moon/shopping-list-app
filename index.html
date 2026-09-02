@@ -4,107 +4,176 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>쇼핑 리스트</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f5f5f7;
+    --black: #17161a;
+    --gold: #b8933f;
+    --gold-soft: #e7d9b9;
+    --red: #e51937;
+    --red-dark: #c30f2a;
+    --bg: #f6f4ef;
     --card: #ffffff;
-    --text: #1d1d1f;
-    --muted: #8e8e93;
-    --accent: #34c759;
-    --accent-dark: #248a3d;
-    --danger: #ff3b30;
-    --border: #e5e5ea;
+    --text: #1c1a17;
+    --muted: #8a8378;
+    --border: #ece7db;
   }
   * { box-sizing: border-box; }
   body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Malgun Gothic", sans-serif;
+    font-family: "Noto Sans KR", -apple-system, BlinkMacSystemFont, "Segoe UI", "Malgun Gothic", sans-serif;
     background: var(--bg);
     color: var(--text);
     display: flex;
     justify-content: center;
     min-height: 100vh;
-    padding: 24px 16px;
+    padding-bottom: 40px;
   }
   .app {
     width: 100%;
-    max-width: 420px;
+    max-width: 440px;
   }
-  h1 {
-    font-size: 24px;
-    font-weight: 700;
-    margin: 8px 0 20px;
+
+  /* ---- 브랜드 헤더 (갤러리아 백화점풍 블랙 & 골드) ---- */
+  .brand-bar {
+    background: linear-gradient(180deg, var(--black), #0e0d10);
+    padding: 22px 16px 20px;
     text-align: center;
+    position: relative;
   }
+  .brand-bar::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 64px;
+    height: 2px;
+    background: var(--gold);
+  }
+  .brand-eyebrow {
+    color: var(--gold-soft);
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  .brand-title {
+    font-family: "Playfair Display", "Noto Sans KR", serif;
+    color: #fff;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin: 0;
+  }
+  .brand-title .dot { color: var(--gold); }
+
+  .content {
+    padding: 20px 16px 0;
+  }
+
   .input-row {
     display: flex;
     gap: 8px;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
   }
   #item-input {
     flex: 1;
-    padding: 12px 14px;
+    padding: 13px 14px;
     font-size: 15px;
     border: 1px solid var(--border);
-    border-radius: 10px;
+    border-radius: 8px;
     background: var(--card);
     color: var(--text);
     outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
   }
   #item-input:focus {
-    border-color: var(--accent);
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(184,147,63,0.15);
   }
   #add-btn {
-    padding: 12px 18px;
-    font-size: 15px;
-    font-weight: 600;
+    padding: 13px 20px;
+    font-size: 14px;
+    font-weight: 700;
     border: none;
-    border-radius: 10px;
-    background: var(--accent);
+    border-radius: 8px;
+    background: var(--red);
     color: white;
     cursor: pointer;
-    transition: background 0.15s;
+    letter-spacing: 0.3px;
+    transition: background 0.15s, transform 0.1s;
+    white-space: nowrap;
   }
-  #add-btn:hover { background: var(--accent-dark); }
+  #add-btn:hover { background: var(--red-dark); }
   #add-btn:active { transform: scale(0.97); }
+  #add-btn:disabled { opacity: 0.5; cursor: default; }
 
   .summary {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 13px;
-    color: var(--muted);
-    margin-bottom: 8px;
-    padding: 0 4px;
+    margin-bottom: 10px;
+    padding: 0 2px;
   }
+  .count-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--red);
+    background: rgba(229,25,55,0.08);
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+  .count-badge .n { font-weight: 700; }
   #clear-checked {
     background: none;
     border: none;
-    color: var(--danger);
-    font-size: 13px;
+    color: var(--muted);
+    font-size: 12.5px;
     cursor: pointer;
     padding: 0;
+    text-decoration: underline;
+    text-underline-offset: 2px;
   }
-  #clear-checked:hover { text-decoration: underline; }
+  #clear-checked:hover { color: var(--red); }
+
+  .sync-status {
+    text-align: center;
+    font-size: 11.5px;
+    color: var(--muted);
+    margin: -2px 0 12px;
+    min-height: 14px;
+  }
+  .sync-status.error { color: var(--red); }
 
   ul#list {
     list-style: none;
     margin: 0;
     padding: 0;
     background: var(--card);
-    border-radius: 12px;
+    border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    box-shadow: 0 1px 2px rgba(23,22,26,0.05), 0 6px 16px rgba(23,22,26,0.05);
+    border: 1px solid var(--border);
   }
   li.item {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 14px 16px;
+    padding: 15px 16px;
     border-bottom: 1px solid var(--border);
-    animation: fadeIn 0.15s ease;
+    border-left: 3px solid transparent;
+    animation: fadeIn 0.18s ease;
+    transition: border-color 0.15s, background 0.15s;
   }
   li.item:last-child { border-bottom: none; }
+  li.item:hover { border-left-color: var(--gold); background: #fbfaf6; }
 
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-4px); }
@@ -116,7 +185,7 @@
     height: 22px;
     flex-shrink: 0;
     border-radius: 50%;
-    border: 2px solid var(--border);
+    border: 2px solid var(--gold-soft);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -125,8 +194,8 @@
     background: transparent;
   }
   .checkbox.checked {
-    background: var(--accent);
-    border-color: var(--accent);
+    background: var(--red);
+    border-color: var(--red);
   }
   .checkbox.checked::after {
     content: "✓";
@@ -158,100 +227,145 @@
     border-radius: 6px;
   }
   .delete-btn:hover {
-    color: var(--danger);
-    background: rgba(255,59,48,0.08);
+    color: var(--red);
+    background: rgba(229,25,55,0.08);
   }
 
   .empty-state {
     text-align: center;
     color: var(--muted);
-    padding: 40px 16px;
+    padding: 48px 16px;
     font-size: 14px;
+    font-family: "Playfair Display", serif;
+    font-style: italic;
+  }
+
+  footer.hint {
+    text-align: center;
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 16px;
+    letter-spacing: 0.3px;
   }
 
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #000000;
-      --card: #1c1c1e;
-      --text: #f2f2f7;
-      --muted: #8e8e93;
-      --border: #2c2c2e;
+      --bg: #121113;
+      --card: #1c1a1c;
+      --text: #f3f1ec;
+      --muted: #9a9389;
+      --border: #2c2a28;
     }
+    li.item:hover { background: #221f1f; }
   }
 </style>
 </head>
 <body>
   <div class="app">
-    <h1>🛒 쇼핑 리스트</h1>
-    <div class="input-row">
-      <input id="item-input" type="text" placeholder="살 물건을 입력하세요" autocomplete="off" maxlength="100">
-      <button id="add-btn">추가</button>
+    <div class="brand-bar">
+      <div class="brand-eyebrow">PREMIUM DAILY CART</div>
+      <h1 class="brand-title">GALLERIA <span class="dot">·</span> SHOPPING LIST</h1>
     </div>
-    <div class="summary">
-      <span id="count-text">0개 항목</span>
-      <button id="clear-checked">체크된 항목 삭제</button>
+
+    <div class="content">
+      <div class="input-row">
+        <input id="item-input" type="text" placeholder="살 물건을 입력하세요" autocomplete="off" maxlength="100">
+        <button id="add-btn">담기</button>
+      </div>
+      <div class="summary">
+        <span class="count-badge">🛒 <span class="n" id="count-text">0개</span> 담음</span>
+        <button id="clear-checked">체크된 항목 삭제</button>
+      </div>
+      <div class="sync-status" id="sync-status"></div>
+      <ul id="list"></ul>
+      <footer class="hint">실시간으로 Supabase 데이터베이스와 동기화됩니다</footer>
     </div>
-    <ul id="list"></ul>
   </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (function () {
-  const STORAGE_KEY = "shopping-list-items";
+  const SUPABASE_URL = "https://ghvihwgrajodvzabqlcz.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdodmlod2dyYWpvZHZ6YWJxbGN6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgzNTg3NzAsImV4cCI6MjEwMzkzNDc3MH0.9vNdp8T3OcsJplBHRRIMZvIyNvhAa4SYhWH4fqxGKgM";
+  const TABLE = "shopping_items";
+
+  const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   const input = document.getElementById("item-input");
   const addBtn = document.getElementById("add-btn");
   const list = document.getElementById("list");
   const countText = document.getElementById("count-text");
   const clearCheckedBtn = document.getElementById("clear-checked");
+  const syncStatus = document.getElementById("sync-status");
 
   let items = [];
 
-  function load() {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      items = raw ? JSON.parse(raw) : [];
-    } catch (e) {
-      items = [];
+  function setStatus(text, isError) {
+    syncStatus.textContent = text || "";
+    syncStatus.className = "sync-status" + (isError ? " error" : "");
+  }
+
+  async function loadItems() {
+    setStatus("불러오는 중...");
+    const { data, error } = await db
+      .from(TABLE)
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error(error);
+      setStatus("동기화 실패: " + error.message, true);
+      return;
     }
+    items = data || [];
+    setStatus("");
+    render();
   }
 
-  function save() {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-    } catch (e) {
-      // localStorage 사용 불가 시 무시 (메모리에만 유지)
-    }
-  }
-
-  function uid() {
-    return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
-  }
-
-  function addItem(text) {
+  async function addItem(text) {
     const trimmed = text.trim();
     if (!trimmed) return;
-    items.unshift({ id: uid(), text: trimmed, checked: false });
-    save();
-    render();
+    addBtn.disabled = true;
+    const { error } = await db.from(TABLE).insert({ text: trimmed, checked: false });
+    addBtn.disabled = false;
+    if (error) {
+      console.error(error);
+      setStatus("추가 실패: " + error.message, true);
+      return;
+    }
+    await loadItems();
   }
 
-  function deleteItem(id) {
-    items = items.filter(function (it) { return it.id !== id; });
-    save();
-    render();
+  async function deleteItem(id) {
+    const { error } = await db.from(TABLE).delete().eq("id", id);
+    if (error) {
+      console.error(error);
+      setStatus("삭제 실패: " + error.message, true);
+      return;
+    }
+    await loadItems();
   }
 
-  function toggleItem(id) {
+  async function toggleItem(id) {
     const it = items.find(function (it) { return it.id === id; });
-    if (it) it.checked = !it.checked;
-    save();
-    render();
+    if (!it) return;
+    const { error } = await db.from(TABLE).update({ checked: !it.checked }).eq("id", id);
+    if (error) {
+      console.error(error);
+      setStatus("변경 실패: " + error.message, true);
+      return;
+    }
+    await loadItems();
   }
 
-  function clearChecked() {
-    items = items.filter(function (it) { return !it.checked; });
-    save();
-    render();
+  async function clearChecked() {
+    const { error } = await db.from(TABLE).delete().eq("checked", true);
+    if (error) {
+      console.error(error);
+      setStatus("삭제 실패: " + error.message, true);
+      return;
+    }
+    await loadItems();
   }
 
   function render() {
@@ -293,7 +407,7 @@
 
     const total = items.length;
     const checkedCount = items.filter(function (it) { return it.checked; }).length;
-    countText.textContent = total + "개 항목" + (checkedCount > 0 ? " (" + checkedCount + "개 완료)" : "");
+    countText.textContent = total + "개" + (checkedCount > 0 ? " (" + checkedCount + "개 완료)" : "");
   }
 
   addBtn.addEventListener("click", function () {
@@ -311,8 +425,14 @@
 
   clearCheckedBtn.addEventListener("click", clearChecked);
 
-  load();
-  render();
+  // 다른 기기/탭에서의 변경 사항도 실시간으로 반영
+  db.channel("shopping_items_changes")
+    .on("postgres_changes", { event: "*", schema: "public", table: TABLE }, function () {
+      loadItems();
+    })
+    .subscribe();
+
+  loadItems();
 })();
 </script>
 </body>
